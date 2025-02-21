@@ -110,7 +110,18 @@ assign ONOP =
 
   // additional JUMPonop decode options go here...
 
+  // PAUL G 
+  // SET LESS THAN IMMEDIATE 
+  `DECODE(`OP(-1), `OP(10), 500) // IF I understand how this works it's basically saying "checking over the entire OP field" (bc -1 is all 1s) "then make sure the value is 10" "and if it is, we goto case 500"
+  
+  // PAUL G
+  // ATOMIC INCREMENT 
+  `DECODE(`OP(-1), `OP(34), 600) // if there is a 34 in the OP field then goto case 600
+
+
   // end of JUMPonop decode options
+  
+
   0;
 
 // initialize registers here...
@@ -159,7 +170,30 @@ always @(posedge clk) begin
       7: begin `ALUZout `SELrd `REGin `JUMP(0) end
 
 	 // Additional instructions go here...
+    
 
+
+   // PAUL G
+   // Set Less Than Immediate Instruction
+      600: begin end
+      601: begin end
+      602: begin end
+      603: begin end
+      604: begin end
+      605: begin end
+      606: begin end
+      607: begin end
+      608: begin end
+      609: begin end
+      610: begin end
+   // PAUL G
+   // Atomic Increment Instruction
+      500: begin end 
+      501: begin end 
+      502: begin end 
+      503: begin end 
+      504: begin end 
+   // DEFAULT CASE
       default: begin `HALT end
     endcase
     STATE <= NEWSTATE;
