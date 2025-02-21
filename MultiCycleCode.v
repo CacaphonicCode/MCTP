@@ -192,7 +192,7 @@ always @(posedge clk) begin
       503: begin `MDRout `SELrt `REGin `NEXT end // take data read from memory put it onto bus, open register given by "rt", take value from bus into selected register 
       504: begin `SELrt `REGout `Yin `NEXT end // I think this might be redundant if I add Yin to prev section, but I'd rather keep it separate at least for testing 
       505: begin `CONST(1) `ALUadd `ALUZin `NEXT end // set bus to value 1, add value of BUS to Y, save in Z  
-      506: begin `ALUZout `MDRin `MEMwrite `NEXT end // put the value of Z onto the bus, set the memory data-register to the value of the mem register, write that value to memory   
+      506: begin `ALUZout `MDRin `MEMwrite `JUMP(0) end // put the value of Z onto the bus, set the memory data-register to the value of the mem register, write that value to memory   
                                                      // note : here we don't need to update MAR because we never changed
                                                      // it from when we read from it before
       // NOT TESTED YET
