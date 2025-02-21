@@ -177,17 +177,12 @@ always @(posedge clk) begin
    // Set Less Than Immediate Instruction
    // slti $rt,$rs,immed 
    // rt=(rs<immed)
-      600: begin end
-      601: begin end
-      602: begin end
-      603: begin end
-      604: begin end
-      605: begin end
-      606: begin end
-      607: begin end
-      608: begin end
-      609: begin end
-      610: begin end
+   // extra note : `define ALUslt		ALUMUX = (Y < BUS);
+      600: begin `SELrs `REGout `Yin `NEXT end // select the register given by 'rs', put it's val onto the bus, put that into Y, NEXT
+      601: begin `IRimmedout `ALUslt `ALUZin `NEXT end // Put the immediate value onto the bus, Y<BUS, put output into Z, NEXT 
+      602: begin `ALUZout `SELrt `REGin `JUMP(0) end // take the output of Z onto the bus, select RT register, save value from bus to RT register, read next Instruction
+      // NOT TESTED YET
+
    // PAUL G
    // Atomic Increment Instruction
    // inc $rt,immed($rs) # that reads value of mem[immed+rs], sets mem[immed+rs]+=1, end with the value read in rt
@@ -205,7 +200,7 @@ always @(posedge clk) begin
   $display();
 end
 endmodule
-
+        
 // Testbench
 module bench;
 reg reset = 1;
