@@ -186,11 +186,16 @@ always @(posedge clk) begin
    // PAUL G
    // Atomic Increment Instruction
    // inc $rt,immed($rs) # that reads value of mem[immed+rs], sets mem[immed+rs]+=1, end with the value read in rt
-      500: begin end 
-      501: begin end 
-      502: begin end 
-      503: begin end 
-      504: begin end 
+      500: begin `SELrs `REGout `Yin `NEXT end // Select reg given by rs, put it's value on bus, save value into Y  
+      501: begin `IRimmedout `ALUadd `ALUZin `NEXT end // put immediate onto bus, add with Y, save output into Z
+      502: begin `ALUZout `MARin `MEMread `UNTILmfc end // take output from Z, use it as memory address, read from that address, wait until read is complete 
+      503: begin `MDRout `SELrt `REGin `NEXT end // take data read from memory put it onto bus, open register given by "rt", take value from bus into selected register 
+      504: begin `SELrt `REGout `Yin `NEXT end // I think this might be redundant if I add Yin to prev section, but I'd rather keep it separate at least for testing 
+      505: begin `CONST(1) `ALUadd `ALUZin `NEXT end // set bus to value 1, add value of BUS to Y, save in Z  
+      506: begin `ALUZout `MDRin `MEMwrite `NEXT end // put the value of Z onto the bus, set the memory data-register to the value of the mem register, write that value to memory   
+                                                     // note : here we don't need to update MAR because we never changed
+                                                     // it from when we read from it before
+      // NOT TESTED YET
    // DEFAULT CASE
       default: begin `HALT end
     endcase
