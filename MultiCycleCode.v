@@ -175,6 +175,8 @@ always @(posedge clk) begin
 
    // PAUL G
    // Set Less Than Immediate Instruction
+   // slti $rt,$rs,immed 
+   // rt=(rs<immed)
       600: begin end
       601: begin end
       602: begin end
@@ -188,6 +190,7 @@ always @(posedge clk) begin
       610: begin end
    // PAUL G
    // Atomic Increment Instruction
+   // inc $rt,immed($rs) # that reads value of mem[immed+rs], sets mem[immed+rs]+=1, end with the value read in rt
       500: begin end 
       501: begin end 
       502: begin end 
