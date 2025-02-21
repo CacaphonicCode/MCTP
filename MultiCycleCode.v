@@ -112,11 +112,11 @@ assign ONOP =
 
   // PAUL G 
   // SET LESS THAN IMMEDIATE 
-  `DECODE(`OP(-1), `OP(10), 500) // IF I understand how this works it's basically saying "checking over the entire OP field" (bc -1 is all 1s) "then make sure the value is 10" "and if it is, we goto case 500"
+  `DECODE(`OP(-1)+`FUNCT(-1), `OP(10), 500) // IF I understand how this works it's basically saying "checking over the entire OP field" (bc -1 is all 1s) "then make sure the value is 10" "and if it is, we goto case 500"
   
   // PAUL G
   // ATOMIC INCREMENT 
-  `DECODE(`OP(-1), `OP(34), 600) // if there is a 34 in the OP field then goto case 600
+  `DECODE(`OP(-1)+`FUNCT(-1), `OP(34), 600) // if there is a 34 in the OP field then goto case 600
 
 
   // end of JUMPonop decode options
