@@ -13,14 +13,26 @@
 \author{}
 
 \begin{abstract}
-ABSTRACT HERE
+  This project involved us implementing 4 new MIPS instructions (or MIPS-like instructions as some of them are not part of the MIPS standard)
+  to the provided verilog MIPS simulator. The instructions were a Set Less Than Immediate (slti) instruction, a simplistic 8-bit 'random' number generator
+  (rand8) instruction, a 32-bit population count (ones) instruction and an atomic increment (inc) instruction. We were provided with some hints for 
+  the right methods to use to implement them so most of the project boils down to triggering the right components in the right order to 
+  implement the more-or-less known procedure to do them, based on our understanding of how this simple CPU is designed and operates.
 \end{abstract}
 
 \maketitle
 
 \section{General Approach}
-GENERAL APPROACH HERE
+Our general approach was initially to review the provided macros and two provided instructions to get an idea of how each component worked. We had to 
+do the same with the one provided decoding function which would return an arbitrary value if the provided instruction matched a refrence value for 
+each instruction we had to implement. After reviewing the provided code we traced through the values of each register, making sure that all of the 
+output statements were triggered before the input statements to ensure that we didn't have any errors associated with when values were actually latched 
+from the bus. From there we just had to follow along each step of the process, loading the values we had into the right registers and then running whatever
+procedures we had to (such as ALU operations or memory reads/writes) to complete the step before moving onto the next one.
 \section{Issues}
-ISSUES HERE
+One of the biggest issues we faced was a simple unfamiliarity with the simulator and how it was designed. While there were enough references to figure it out
+eventually, the references available weren't entirely complete and it required piecing different bits and pieces together to get a full picture of how things
+worked. For instance, neither of thw two provided instructions used an immediate value meaning that the only way to figure out how to use that was to go back 
+and look through the list of available 'define' macros and find the "IRimmedout" one.
 \end{document}
 
