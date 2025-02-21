@@ -112,11 +112,11 @@ assign ONOP =
 
   // PAUL G 
   // SET LESS THAN IMMEDIATE 
-  `DECODE(`OP(-1), `OP(10), 500) // IF I understand how this works it's basically saying "checking over the entire OP field" (bc -1 is all 1s) "then make sure the value is 10" "and if it is, we goto case 500"
+  `DECODE(`OP(-1)+`FUNCT(-1), `OP(10), 500) // IF I understand how this works it's basically saying "checking over the entire OP field" (bc -1 is all 1s) "then make sure the value is 10" "and if it is, we goto case 500"
   
   // PAUL G
   // ATOMIC INCREMENT 
-  `DECODE(`OP(-1), `OP(34), 600) // if there is a 34 in the OP field then goto case 600
+  `DECODE(`OP(-1)+`FUNCT(-1), `OP(34), 600) // if there is a 34 in the OP field then goto case 600
 
 
   // end of JUMPonop decode options
@@ -175,6 +175,8 @@ always @(posedge clk) begin
 
    // PAUL G
    // Set Less Than Immediate Instruction
+   // slti $rt,$rs,immed 
+   // rt=(rs<immed)
       600: begin end
       601: begin end
       602: begin end
@@ -188,6 +190,7 @@ always @(posedge clk) begin
       610: begin end
    // PAUL G
    // Atomic Increment Instruction
+   // inc $rt,immed($rs) # that reads value of mem[immed+rs], sets mem[immed+rs]+=1, end with the value read in rt
       500: begin end 
       501: begin end 
       502: begin end 
