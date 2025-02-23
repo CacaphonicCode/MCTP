@@ -121,6 +121,11 @@ assign ONOP =
   // IAN T
   // Population Count.
   `DECODE(`OP(-1)+`FUNCT(-1), `OP(32), 30)
+
+  // CARLOS B
+  // RAND8
+  `DECODE(`OP(-1)+`FUNCT(-1), `FUNCT(1), 700)
+
 	
   // end of JUMPonop decode options
   
@@ -228,7 +233,27 @@ always @(posedge clk) begin
       44: begin `ALUZout `CONST('h3f) `Yin `ALUand `ALUZin `NEXT end
       // Store computed population count in $rt
       45: begin `ALUZout `SELrt `REGin `JUMP(0) end
+
 	    
+   // CARLOS B
+   // RAND8 Instruction: rand8 $rd, $rs  --> rd = (13*rs)%256
+      700: begin `CONST(3) `Yin `NEXT end        // Load constant 3 into Y for shift left by 3
+      701: begin `SELrs `REGout `ALUsll `ALUZin `NEXT end // Compute (rs << 3); ALUZ = rs << 3
+      702: begin `ALUZout `SELrd `REGin `NEXT end       // Save term1 (rs << 3) into destination ($rd)
+      703: begin `CONST(2) `Yin `NEXT end        // Load constant 2 into Y for shift left by 2
+      704: begin `SELrs `REGout `ALUsll `ALUZin `NEXT end  // Compute (rs << 2); ALUZ = rs << 2
+      705: begin `SELrd `REGout `Yin `NEXT end       // Load current rd (term1) into Y
+      706: begin `ALUZout `ALUadd `ALUZin `NEXT end    // Add: (rs << 3) + (rs << 2); ALUZ = term1 + term2
+      707: begin `ALUZout `SELrd `REGin `NEXT end        // Save sum (12*rs) into rd     
+      708: begin `SELrd `REGout `Yin `NEXT end        // Load current rd (12*rs) into Y
+      709: begin `SELrs `REGout `ALUadd `ALUZin `NEXT end  // Add rs: 12*rs + rs = 13*rs; ALUZ = 13*rs
+      710: begin `ALUZout `SELrd `REGin `NEXT end         // Save result (13*rs) into rd
+      711: begin `CONST(8'hFF) `Yin `NEXT end        // Load mask 0xFF into Y
+      712: begin `SELrd `REGout `ALUand `ALUZin `NEXT end // Compute (13*rs) & 0xFF; ALUZ = final 8-bit result
+      713: begin `ALUZout `SELrd `REGin `JUMP(0) end     // Write final result into rd and return to fetch
+
+
+  
    // DEFAULT CASE
       default: begin `HALT end
     endcase
