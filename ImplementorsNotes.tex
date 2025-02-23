@@ -40,6 +40,7 @@ One of the biggest issues we faced was a simple unfamiliarity with the simulator
 eventually, the references available weren't entirely complete and it required piecing different bits and pieces together to get a full picture of how things
 worked. For instance, neither of thw two provided instructions used an immediate value meaning that the only way to figure out how to use that was to go back 
 and look through the list of available 'define' macros and find the "IRimmedout" one.
-Another issue was that initial implementations used state numbers above 255, which caused decoding errors due to the 8‑bit width of the state register. Renumbering the microcode sequence to use values below 256 resolved this issue.
+Another issue was that initial implementations used state numbers above 255, which caused decoding errors due to the 8‑bit width of the state register. 
+Renumbering the microcode sequence to use values below 256 resolved this issue.
 \end{document}
 
