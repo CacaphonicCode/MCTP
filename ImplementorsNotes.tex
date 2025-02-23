@@ -9,7 +9,7 @@
 \subtitle{Implementor's Notes}
 
 \author{Paul Grubbs}
-\author{}
+\author{Carlos Borge}
 \author{}
 
 \begin{abstract}
@@ -29,10 +29,17 @@ each instruction we had to implement. After reviewing the provided code we trace
 output statements were triggered before the input statements to ensure that we didn't have any errors associated with when values were actually latched 
 from the bus. From there we just had to follow along each step of the process, loading the values we had into the right registers and then running whatever
 procedures we had to (such as ALU operations or memory reads/writes) to complete the step before moving onto the next one.
+
+The rand8 instruction updates a seed by computing:
+  rd = (13 × rs) % 256
+Using the identity 13 = 8 + 4 + 1, the operation is implemented via shift-and-add (rs shifted left by 3 for 8×rs, by 2 for 4×rs, and adding rs) followed by a bitwise AND with 0xFF. The instruction is encoded with OP=0 and FUNCT=1.
+
+
 \section{Issues}
 One of the biggest issues we faced was a simple unfamiliarity with the simulator and how it was designed. While there were enough references to figure it out
 eventually, the references available weren't entirely complete and it required piecing different bits and pieces together to get a full picture of how things
 worked. For instance, neither of thw two provided instructions used an immediate value meaning that the only way to figure out how to use that was to go back 
 and look through the list of available 'define' macros and find the "IRimmedout" one.
+Another issue was that initial implementations used state numbers above 255, which caused decoding errors due to the 8‑bit width of the state register. Renumbering the microcode sequence to use values below 256 resolved this issue.
 \end{document}
 
