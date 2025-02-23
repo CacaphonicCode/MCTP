@@ -118,7 +118,10 @@ assign ONOP =
   // ATOMIC INCREMENT 
   `DECODE(`OP(-1)+`FUNCT(-1), `OP(34), 600) // if there is a 34 in the OP field then goto case 600
 
-
+  // IAN T
+  // Population Count.
+  `DECODE(`OP(-1)+`FUNCT(-1), `OP(32), 30)
+	
   // end of JUMPonop decode options
   
 
@@ -196,6 +199,36 @@ always @(posedge clk) begin
                                                      // note : here we don't need to update MAR because we never changed
                                                      // it from when we read from it before
       // NOT TESTED YET
+
+   // IAN T
+   // Population Count, count ones in rt, output to rs
+      // Load $rs
+      30: begin `SELrs `REGout `Yin `NEXT end
+      // Computes (v>>1)
+      31: begin); `ALUZout `CONST(1) `Yin `ALUsrl `ALUZin `NEXT end
+      //  ((v >> 1) & 0x55555555
+      32: begin `ALUZout `CONST('h55555555) `Yin `ALUand `ALUZin `NEXT end
+      // v - ((v >> 1) & 0x55555555
+      33: begin `Yout `ALUZout `Yin `SELrs `REGout `ALUsub `ALUZin `NEXT end
+      // sum = (sum & 0x33333333) + ((sum >> 2) & 0x33333333)
+      34: begin `ALUZout `CONST('h33333333) `Yin `ALUand `ALUZin `NEXT end
+      34: begin `ALUZout `CONST(2) `Yin `ALUsrl `ALUZin `NEXT end
+      35: begin `ALUZout `CONST('h33333333) `Yin `ALUand `ALUZin `NEXT end
+      36: begin `Yout `ALUZout `Yin `ALUadd `ALUZin `NEXT end
+      // sum = (sum + (sum >> 4)) & 0x0f0f0f0f;
+      37: begin `ALUZout `CONST(4) `Yin `ALUsrl `ALUZin `NEXT end
+      38: begin `ALUZout `Yin `ALUadd `ALUZin `NEXT end
+      39: begin `ALUZout `CONST('h0f0f0f0f) `Yin `ALUand `ALUZin `NEXT end
+      // sum = sum + sum >> 8;
+      40: begin `ALUZout `CONST(8) `Yin `ALUsrl `ALUZin `NEXT end
+      41: begin `ALUZout `Yin `ALUadd `ALUZin `NEXT end
+      // sum = (sum + (sum >> 16)) & 0x3f;
+      42: begin `ALUZout `CONST(16) `Yin `ALUsrl `ALUZin `NEXT end
+      43: begin `ALUZout `Yin `ALUadd `ALUZin `NEXT end
+      44: begin `ALUZout `CONST('h3f) `Yin `ALUand `ALUZin `NEXT end
+      // Store computed population count in $rt
+      45: begin `ALUZout `SELrt `REGin `JUMP(0) end
+	    
    // DEFAULT CASE
       default: begin `HALT end
     endcase
