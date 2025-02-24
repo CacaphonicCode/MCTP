@@ -182,7 +182,7 @@ always @(posedge clk) begin
 
 
    // PAUL G
-   // Set Less Than Immediate Instruction
+   // Set Less Than Immediate Instruction ( OP = 10 )
    // slti $rt,$rs,immed 
    // rt=(rs<immed)
    // extra note : `define ALUslt		ALUMUX = (Y < BUS);
@@ -192,7 +192,7 @@ always @(posedge clk) begin
       // NOT TESTED YET
 
    // PAUL G
-   // Atomic Increment Instruction
+   // Atomic Increment Instruction ( OP = 34 )
    // inc $rt,immed($rs) # that reads value of mem[immed+rs], sets mem[immed+rs]+=1, end with the value read in rt
       50: begin `SELrs `REGout `Yin `NEXT end // Select reg given by rs, put it's value on bus, save value into Y  
       51: begin `IRimmedout `ALUadd `ALUZin `NEXT end // put immediate onto bus, add with Y, save output into Z
@@ -210,7 +210,7 @@ always @(posedge clk) begin
       // Load $rs
       30: begin `SELrs `REGout `Yin `NEXT end
       // Computes (v>>1)
-      31: begin); `ALUZout `CONST(1) `Yin `ALUsrl `ALUZin `NEXT end
+      31: begin; `ALUZout `CONST(1) `Yin `ALUsrl `ALUZin `NEXT end
       //  ((v >> 1) & 0x55555555
       32: begin `ALUZout `CONST('h55555555) `Yin `ALUand `ALUZin `NEXT end
       // v - ((v >> 1) & 0x55555555
