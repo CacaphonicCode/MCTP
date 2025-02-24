@@ -112,11 +112,11 @@ assign ONOP =
 
   // PAUL G 
   // SET LESS THAN IMMEDIATE 
-  `DECODE(`OP(-1)+`FUNCT(-1), `OP(10), 500) // IF I understand how this works it's basically saying "checking over the entire OP field" (bc -1 is all 1s) "then make sure the value is 10" "and if it is, we goto case 500"
+  `DECODE(`OP(-1)+`FUNCT(-1), `OP(10), 50) // IF I understand how this works it's basically saying "checking over the entire OP field" (bc -1 is all 1s) "then make sure the value is 10" "and if it is, we goto case 500"
   
   // PAUL G
   // ATOMIC INCREMENT 
-  `DECODE(`OP(-1)+`FUNCT(-1), `OP(34), 600) // if there is a 34 in the OP field then goto case 600
+  `DECODE(`OP(-1)+`FUNCT(-1), `OP(34), 60) // if there is a 34 in the OP field then goto case 600
 
   // IAN T
   // Population Count.
@@ -186,21 +186,21 @@ always @(posedge clk) begin
    // slti $rt,$rs,immed 
    // rt=(rs<immed)
    // extra note : `define ALUslt		ALUMUX = (Y < BUS);
-      600: begin `SELrs `REGout `Yin `NEXT end // select the register given by 'rs', put it's val onto the bus, put that into Y, NEXT
-      601: begin `IRimmedout `ALUslt `ALUZin `NEXT end // Put the immediate value onto the bus, Y<BUS, put output into Z, NEXT 
-      602: begin `ALUZout `SELrt `REGin `JUMP(0) end // take the output of Z onto the bus, select RT register, save value from bus to RT register, read next Instruction
+      60: begin `SELrs `REGout `Yin `NEXT end // select the register given by 'rs', put it's val onto the bus, put that into Y, NEXT
+      61: begin `IRimmedout `ALUslt `ALUZin `NEXT end // Put the immediate value onto the bus, Y<BUS, put output into Z, NEXT 
+      62: begin `ALUZout `SELrt `REGin `JUMP(0) end // take the output of Z onto the bus, select RT register, save value from bus to RT register, read next Instruction
       // NOT TESTED YET
 
    // PAUL G
    // Atomic Increment Instruction
    // inc $rt,immed($rs) # that reads value of mem[immed+rs], sets mem[immed+rs]+=1, end with the value read in rt
-      500: begin `SELrs `REGout `Yin `NEXT end // Select reg given by rs, put it's value on bus, save value into Y  
-      501: begin `IRimmedout `ALUadd `ALUZin `NEXT end // put immediate onto bus, add with Y, save output into Z
-      502: begin `ALUZout `MARin `MEMread `UNTILmfc end // take output from Z, use it as memory address, read from that address, wait until read is complete 
-      503: begin `MDRout `SELrt `REGin `NEXT end // take data read from memory put it onto bus, open register given by "rt", take value from bus into selected register 
-      504: begin `SELrt `REGout `Yin `NEXT end // I think this might be redundant if I add Yin to prev section, but I'd rather keep it separate at least for testing 
-      505: begin `CONST(1) `ALUadd `ALUZin `NEXT end // set bus to value 1, add value of BUS to Y, save in Z  
-      506: begin `ALUZout `MDRin `MEMwrite `JUMP(0) end // put the value of Z onto the bus, set the memory data-register to the value of the mem register, write that value to memory   
+      50: begin `SELrs `REGout `Yin `NEXT end // Select reg given by rs, put it's value on bus, save value into Y  
+      51: begin `IRimmedout `ALUadd `ALUZin `NEXT end // put immediate onto bus, add with Y, save output into Z
+      52: begin `ALUZout `MARin `MEMread `UNTILmfc end // take output from Z, use it as memory address, read from that address, wait until read is complete 
+      53: begin `MDRout `SELrt `REGin `NEXT end // take data read from memory put it onto bus, open register given by "rt", take value from bus into selected register 
+      54: begin `SELrt `REGout `Yin `NEXT end // I think this might be redundant if I add Yin to prev section, but I'd rather keep it separate at least for testing 
+      55: begin `CONST(1) `ALUadd `ALUZin `NEXT end // set bus to value 1, add value of BUS to Y, save in Z  
+      56: begin `ALUZout `MDRin `MEMwrite `JUMP(0) end // put the value of Z onto the bus, set the memory data-register to the value of the mem register, write that value to memory   
                                                      // note : here we don't need to update MAR because we never changed
                                                      // it from when we read from it before
       // NOT TESTED YET
