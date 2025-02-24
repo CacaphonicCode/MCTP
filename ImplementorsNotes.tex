@@ -31,11 +31,10 @@ from the bus. From there we just had to follow along each step of the process, l
 procedures we had to (such as ALU operations or memory reads/writes) to complete the step before moving onto the next one.
 
 The rand8 instruction updates a seed by computing:
-  rd = (13 × rs) % 256
+	rd = (13 * rs) \% 256
 Using the identity 13 = 8 + 4 + 1, the operation is implemented via shift-and-add (rs shifted left by 3 for 8×rs, by 2 for 4×rs, and adding rs) followed by a bitwise AND with 0xFF. The instruction is encoded with OP=0 and FUNCT=1.
 
 The most efficient population count instruction for a machine without a fast mulitplier was implemented. The instruction was tested with the hex value F0F0F0F0 and it gave the correct result of 00000010 or 16 in decimal.
-
 
 \section{Issues}
 One of the biggest issues we faced was a simple unfamiliarity with the simulator and how it was designed. While there were enough references to figure it out
