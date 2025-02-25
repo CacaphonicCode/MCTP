@@ -38,10 +38,14 @@ The most efficient population count instruction for a machine without a fast mul
 
 \section{Issues}
 One of the biggest issues we faced was a simple unfamiliarity with the simulator and how it was designed. While there were enough references to figure it out
-eventually, the references available weren't entirely complete and it required piecing different bits and pieces together to get a full picture of how things
+eventually, the references available weren't fully comprehensive and it required piecing different bits and pieces together to get a full picture of how things
 worked. For instance, neither of thw two provided instructions used an immediate value meaning that the only way to figure out how to use that was to go back 
 and look through the list of available 'define' macros and find the "IRimmedout" one.
-Another issue was that initial implementations used state numbers above 255, which caused decoding errors due to the 8‑bit width of the state register. 
-Renumbering the microcode sequence to use values below 256 resolved this issue.
+
+Another issue was that initial implementations used state numbers above 255, which caused decoding errors due to the 8‑bit width of the state register. Renumbering the microcode sequence to use values below 256 resolved this issue.
+
+We also found that, despite the example code not doing so, we had to call the "NEXT" macro even after calling the "UntilMFC" macro. While we don't know why the provided examples do not do this, we found that failing to would result in the code simply looping at whichever state called UntilMFC until reaching the execution limit and stopping. 
+
+Finally, we discovered that if you attempted to write to a register that was not initialized it would appear to not work, even though the exact same instruction would work if writing a register that was fully initialized. In other words if a register isn't initialized at the start the program, it can't be used at all later, even when only writing to it.
 \end{document}
 
