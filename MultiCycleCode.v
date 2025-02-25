@@ -66,14 +66,22 @@ input `WORD dwrite,  addr;
 input rnotw, strobe;
 reg `WORD m `MEMDIM;
 
-// initialize memory here...
 initial begin
   // m[0] = MIPS instruction: add $1,$2,$3
-  m[0] = `OP(0) + `RD(1) + `RS(2) + `RT(3) + `FUNCT('h20);
-
+  //m[0] = `OP(0) + `RD(1) + `RS(2) + `RT(3) + `FUNCT('h20);
+  //m[0] = `OP(10) + `IMMED(10) + `RS(2) + `RT(0);
+  m[0] = `OP(34) + `IMMED(10) + `RS(2) + `RT(0);
+  m[1] = `OP(34) + `IMMED(10) + `RS(2) + `RT(0);
+  m[2] = `OP(34) + `IMMED(10) + `RS(2) + `RT(0);
+  m[3] = `OP(34) + `IMMED(10) + `RS(2) + `RT(0);
+  m[4] = `OP(34) + `IMMED(10) + `RS(2) + `RT(0);
+  m[5] = `OP(34) + `IMMED(10) + `RS(2) + `RT(0);
+  m[6] = `OP(34) + `IMMED(10) + `RS(2) + `RT(0);
   // illegal instruction to stop simulator
-  m[1] = 32'h00000000;
+  m[7] = 32'h00000000;
 end
+
+
 
 always @(posedge strobe) begin
   mfc = 0;
@@ -196,7 +204,7 @@ always @(posedge clk) begin
    // inc $rt,immed($rs) # that reads value of mem[immed+rs], sets mem[immed+rs]+=1, end with the value read in rt
       50: begin `SELrs `REGout `Yin `NEXT end // Select reg given by rs, put it's value on bus, save value into Y  
       51: begin `IRimmedout `ALUadd `ALUZin `NEXT end // put immediate onto bus, add with Y, save output into Z
-      52: begin `ALUZout `MARin `MEMread `UNTILmfc end // take output from Z, use it as memory address, read from that address, wait until read is complete 
+      52: begin `ALUZout `MARin `MEMread `UNTILmfc `NEXT end // take output from Z, use it as memory address, read from that address, wait until read is complete 
       53: begin `MDRout `SELrt `REGin `NEXT end // take data read from memory put it onto bus, open register given by "rt", take value from bus into selected register 
       54: begin `SELrt `REGout `Yin `NEXT end // I think this might be redundant if I add Yin to prev section, but I'd rather keep it separate at least for testing 
       55: begin `CONST(1) `ALUadd `ALUZin `NEXT end // set bus to value 1, add value of BUS to Y, save in Z  
